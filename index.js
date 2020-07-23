@@ -8,6 +8,7 @@ const router = require('./src/infrastructure/http/router')({logger, auth_middlew
 const database = require('./src/infrastructure/database/database')({config: config.database, logger})
 const server = require ('./src/infrastructure/http/server')({config: config.server, database, router, logger, errorHandler, auth_middlewares, BaseError})
  
+
 server.start() 
 
  
