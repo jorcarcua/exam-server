@@ -1,1 +1,1 @@
-# Proyect exam-server
+# Project exam-server
