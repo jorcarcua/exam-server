@@ -1,0 +1,26 @@
+[
+    {
+         
+        "title": "exam 1",
+        "numberQuestions":3,
+        "success": 1,
+        "failure": 2,
+        "user": 1
+    },
+    {
+         
+        "title": "exam 2", 
+        "numberQuestions":3,
+        "success": 1,
+        "failure": 2,
+        "user": 1
+    },
+    {
+        
+        "title": "exam 3",
+        "numberQuestions":3,
+        "success": 1,
+        "failure": 2,
+        "user": 2
+    }
+]
