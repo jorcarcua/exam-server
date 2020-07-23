@@ -1,4 +1,3 @@
-
 const config = require('./config')
 const logger = require ('./src/infrastructure/logging/logger')
 const {BaseError} = require('./src/infrastructure/http/errors/')
