@@ -2,18 +2,11 @@ const BaseError = require("../../../infrastructure/http/errors/BaseError")
 
 
 module.exports = ({examRepository, examValidator}) => async (id, exam) => {
-     
-        const { error, value } = await examValidator.validate(exam)
-
-        if (error) {
-            const messages = error.details.map(error => error.message)
-            throw (new BaseError(400, messages.toString(), true))
+      
+        const error = await examValidator.validate(exam) 
+        if (error) { 
+            throw (new BaseError(error.status, error.message, true))
         } else {  
-            const titleExists = await examRepository.existsExamWithTitle(exam.title)
-            
-            if(titleExists){
-                throw (new BaseError(409, `Conflict: There is already and exam with title ${exam.title}`, true))
-            }
 
             const newExam = await examRepository.updateExam(id, exam) 
 

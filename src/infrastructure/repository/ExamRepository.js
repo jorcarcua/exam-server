@@ -23,11 +23,8 @@ module.exports = ({examModel}) => ({
         updateExam: async (id, exam) => {  
              return await examModel.findByIdAndUpdate(id, exam, {new:true}).exec()
         },
-        deleteExam: async (id) => {
-             console.log(`id en el reposi ${id}`)
-             const result = await examModel.findOneAndDelete({_id: id}).exec()
-             console.log('en respostiroy')
-             console.log(result)
+        deleteExam: async (id) => { 
+             const result = await examModel.findOneAndDelete({_id: id}).exec() 
              return result
             // let examToDelete = getExam(exam.id)
             // return await examToDelete.remove()

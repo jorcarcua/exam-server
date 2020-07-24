@@ -1,9 +1,6 @@
 const {examRepository, questionRepository, userRepository}  = require('../../infrastructure/repository') 
-const {examValidator, questionValidator, userValidator} = require('./../../domain/validators')
+const {examValidator, questionValidator, userValidator} = require('../../domain/validators')
 const auth_actions = require('../../infrastructure/authentication/actions')
-
-
- 
  
   
 module.exports = {
