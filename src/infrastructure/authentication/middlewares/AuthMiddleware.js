@@ -8,8 +8,7 @@ const bcrypt            = require('bcrypt');
 const AuthMiddleware = ({config, checkCredentials, findUser}) => {  
     passport.use(new LocalStrategy(async (username, password, done) => { 
         
-            const result = await checkCredentials(username, password)
-            console.log(`el resultado de checkcred es ${result}`)
+            const result = await checkCredentials(username, password) 
             done(null,  result)
        
     }))
@@ -32,16 +31,13 @@ const AuthMiddleware = ({config, checkCredentials, findUser}) => {
  
     passport.use(new JwtStrategy(opts,  async (jwt_payload, done) =>{ 
        // try{ 
-            console.log('va a llamar a finduser')
-            console.log(jwt_payload)
-            console.log(jwt_payload.sub)
+           
             const user = await findUser({_id: jwt_payload.sub})
             
             if(user){
                 done(null, user)
             }
-            else{
-                console.log('entra en false')
+            else{ 
                 done(null, false)
             } 
       //  }

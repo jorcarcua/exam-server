@@ -7,67 +7,72 @@ const routerAPI = ({logger, auth_middlewares, BaseError, actions}) => {
 
     router.get('/exams', auth_middlewares.ensureAuthenticated, async (req, res, next) =>{
         try{
-             console.log('mensaje desde exams')
-             console.log(req.user._id)
-             const examList= await actions.getAllExams(req.user._id)  
-             const result = examList.map( exam => exam.transform()) 
-             console.log(result)
-             res.status(200).json(result)
+             const examList= await actions.getExamsByUser(req.user._id);  
+             const result = examList.map( exam => exam.transform());  
+             res.status(200).json(result);
         }catch(error){
-            next(error)
+            next(error);
         }
     })
     
-    router.get('/exam/:id', async (req, res, next) =>{
+    router.get('/exam/:id', auth_middlewares.ensureAuthenticated,async (req, res, next) =>{
         try{
-             const examList= await actions.getAllExams(req.user.id)
-             res.status(200).json(examList)
+             const exam= await actions.findExam(req.params.id); 
+             if(exam){  
+                 res.status(200).json(exam); 
+             }else{
+                next(new BaseError(404,'Exam Not Found',true));
+            } 
         }catch(error){
-            next(error)
+            next(error);
         }
     })
     
-    router.post('/exams',   async (req,res,next) =>{
-        try{
-            //TODO:VALIDAR req.exam, si no es valido mandar algun tipo de error
-           const exam = req.exam
+    router.post('/exams',  auth_middlewares.ensureAuthenticated, async (req,res,next) =>{
+        try{ 
+           const exam = req.body 
            exam.user = req.user.id
-           const result= await actions.createExam(req.exam)
-            res.status(201).json(result)
+           const result= await actions.createExam(exam)
+           res.status(201).json(result)
         }catch(error){
-            next(error)
+            next(error);
         }
     })
     
     router.put('/exam/:id', async(req,res,next) => {
         try{
-            //TODO:VALIDAR req.exam, si no es valido mandar algun tipo de error
-            const result = await actions.updateExam(req.exam)
+            const exam = req.body
+            const result = await actions.updateExam(req.params.id, exam)
             res.status(200).json(result)
         }catch(error){
             next(error)
         }
     })
     
-    router.delete('/exam/:id', async(req,res,next)=>{
+    router.delete('/exam/:id', auth_middlewares.ensureAuthenticated, async(req,res,next)=>{
         try{
             const result = await actions.deleteExam(req.params.id)
-            res.status(204).json(result)
+            console.log('el reusultad')
+            console.log(result)
+            if(!result){
+                throw new BaseError(404, 'Exam Not Found', true)
+            }
+            res.status(200).json(result)
         }catch(error){
             next(error)
         }
     })
     
-    router.delete('/exams', async(req,res,next)=>{
-    
-    })
-    
-    
     //QUESTIONS
     
-    router.get('/exams/:id/questions', async(req,res,next)=>{
+    router.get('nextQuestion', auth_middlewares.ensureAuthenticated, async(req,res,next)=>{
+
+    })
+    
+    router.get('/exams/:id/questions', auth_middlewares.ensureAuthenticated, async(req,res,next)=>{
     
     })
+
 
 
     //AUTHENTICATION
@@ -87,10 +92,10 @@ const routerAPI = ({logger, auth_middlewares, BaseError, actions}) => {
 
     router.post('/register', async (req, res, next) => { 
         try{  
-           const user =  await actions.register(req.body) 
-           res.json({data: user})
+           const user =  await actions.register(req.body);
+           res.json({data: user});
         }catch(error){ 
-            next(error)
+            next(error);
         }
 
     })   

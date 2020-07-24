@@ -1,5 +1,5 @@
 
-const passport          = require('passport');
+const passport  = require('passport');
  
  
 module.exports = ({BaseError}) => (req,res,next) => { 
@@ -9,9 +9,7 @@ module.exports = ({BaseError}) => (req,res,next) => {
          
         if (err) { 
             return next(err) }  
-        if (!user) { return next(new BaseError(401, 'no valid token provided', true)) }
-        console.log('mete el user en el request')
-        console.log(user)
+        if (!user) { return next(new BaseError(401, 'no valid token provided', true)) } 
         req.user = user
         next()
     })(req, res, next);
