@@ -1,0 +1,8 @@
+
+
+module.exports = {
+    SUCCESS: ' SUCCESS',
+    ERROR: 'ERROR',
+    VALIDATION_ERROR: 'VALIDATION_ERROR',
+    CONFLICT_ERROR: 'CONFLICT_ERROR'
+}

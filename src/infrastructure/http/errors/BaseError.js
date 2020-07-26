@@ -1,5 +1,5 @@
 class BaseError extends Error {
-    constructor(statusCode, message, isOperational){
+    constructor(statusCode, message, isOperational = true){
         super();
         this.statusCode = statusCode;
         this.message = message;

@@ -2,5 +2,6 @@
 
 module.exports =  {
     errorHandler: require('./errorHandler'),
-    BaseError: require('./BaseError')
+    BaseError: require('./BaseError'),
+    BadRequestError: require('./BadRequestError')
 }

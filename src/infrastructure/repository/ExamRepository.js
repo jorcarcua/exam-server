@@ -2,10 +2,10 @@
 
 module.exports = ({examModel}) => ({
     
-        getExamsByUser: async (userId) => { 
+        getExamsByUser: async (userId) => {  
              return await examModel.find({user: userId}).exec()  
         }, 
-        findExam: async (examId) => { 
+        findExam: async (examId) => {  
              return await examModel.findOne({_id: examId}) .exec()  
         },
         existsExamWithTitle: async (title) => {
@@ -23,13 +23,9 @@ module.exports = ({examModel}) => ({
         updateExam: async (id, exam) => {  
              return await examModel.findByIdAndUpdate(id, exam, {new:true}).exec()
         },
-        deleteExam: async (id) => { 
-             const result = await examModel.findOneAndDelete({_id: id}).exec() 
-             return result
-            // let examToDelete = getExam(exam.id)
-            // return await examToDelete.remove()
-        }
-
+        deleteExam: async (id) => {   
+             return  await examModel.findOneAndDelete({_id: id}).exec()  
+        }  
 })
 
 const getExam = async (examModel, id) => {

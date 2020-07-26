@@ -1,7 +1,7 @@
 const express = require('express');
 let router = express.Router();
- 
- 
+const {BaseError} = require('./errors');
+
   
 const routerAPI = ({logger, auth_middlewares, BaseError, actions}) => {
 
@@ -17,14 +17,14 @@ const routerAPI = ({logger, auth_middlewares, BaseError, actions}) => {
     
     router.get('/exam/:id', auth_middlewares.ensureAuthenticated,async (req, res, next) =>{
         try{
-             const exam= await actions.findExam(req.params.id); 
-             if(exam){  
-                 res.status(200).json(exam); 
+             const result= await actions.findExam(req.params.id); 
+             if(result){   
+                 res.status(200).json(result); 
              }else{
-                next(new BaseError(404,'Exam Not Found',true));
+                next(new BaseError(404,'Exam Not Found'));
             } 
-        }catch(error){
-            next(error);
+        }catch(error){ 
+            handleExamError(error, next)
         }
     })
     
@@ -33,9 +33,15 @@ const routerAPI = ({logger, auth_middlewares, BaseError, actions}) => {
            const exam = req.body 
            exam.user = req.user.id
            const result= await actions.createExam(exam)
-           res.status(201).json(result)
+           console.log("reuslls")
+           console.log(result)
+           if(result){   
+            res.status(201).json(result)
+           }else{
+            next(new BaseError(404,'Exam Not Found'));
+           }  
         }catch(error){
-            next(error);
+            handleExamError(error, next)
         }
     })
     
@@ -43,25 +49,41 @@ const routerAPI = ({logger, auth_middlewares, BaseError, actions}) => {
         try{
             const exam = req.body
             const result = await actions.updateExam(req.params.id, exam)
-            res.status(200).json(result)
+            if(result){
+                res.status(200).json(result)
+            }else{
+                next(new BaseError(404,'Exam Not Found'));
+            }
+            
         }catch(error){
-            next(error)
+            handleExamError(error, next)
         }
     })
     
     router.delete('/exam/:id', auth_middlewares.ensureAuthenticated, async(req,res,next)=>{
         try{
-            const result = await actions.deleteExam(req.params.id)
-            console.log('el reusultad')
+            const result = await actions.deleteExam(req.params.id) 
+            console.log('resukt')
             console.log(result)
             if(!result){
-                throw new BaseError(404, 'Exam Not Found', true)
+                throw new BaseError(404, 'Exam Not Found')
             }
             res.status(200).json(result)
         }catch(error){
-            next(error)
+            handleExamError(error, next)
         }
     })
+
+    const handleExamError = (error, next) => {
+        switch(error.message) {
+            case 'ValidationSyntaxError':
+                next(new BaseError(400, error.details))
+            case 'ValidationConflictError':
+                next(new BaseError(404, error.details))
+            default: 
+                next(error)
+        }
+    }
     
     //QUESTIONS
     

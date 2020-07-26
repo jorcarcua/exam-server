@@ -1,17 +1,15 @@
-const BaseError = require("../../../infrastructure/http/errors/BaseError")
+
 
 
 module.exports = ({examRepository, examValidator}) => async (id, exam) => {
+        const paramValidationResult = await examValidator.validateParams({id: id})  
       
-        const error = await examValidator.validate(exam) 
-        if (error) { 
-            throw (new BaseError(error.status, error.message, true))
-        } else {  
-
-            const newExam = await examRepository.updateExam(id, exam) 
-
-            if(!newExam){ throw(new BaseError(404, 'Exam not found', true)) }
+        if(paramValidationResult.error) { throw paramValidationResult.error }
+       
+        const bodyValidationResult  = await examValidator.validateBody(exam) 
+     
+        if (bodyValidationResult.error) {  throw bodyValidationResult.error }   
             
-            return newExam
-        }
+        return  await examRepository.updateExam(id, exam)   
+        
 }

@@ -1,7 +1,11 @@
 const Joi = require('@hapi/joi');
 const {joiValidation, addErrors} = require('./utils/validationUtils')
 
-const ExamSchema = Joi.object({
+//TODO: Move
+const NUM_MAX_EXAMS = 3
+
+ 
+const ExamBodySchema = Joi.object({
     title: Joi.string()
         .min(3)
         .max(30)
@@ -9,11 +13,16 @@ const ExamSchema = Joi.object({
     user: Joi.string()
 })
 
-//TODO: Move
-const NUM_MAX_EXAMS = 3
+const ExamParamsSchema = Joi.object({
+    id: Joi.string().regex(/^[0-9a-fA-F]{24}$/) 
+})
 
+ 
 
 const examValidator = ({examRepository}) => {
+  
+
+
     const existTitleValidation = async (title) => {
         const text = 'Title already exists'
         let result = []
@@ -34,13 +43,15 @@ const examValidator = ({examRepository}) => {
     }
     
     return ({
-        validate : async (input) => {
-            let messages = []
+        validateBody : async (input) => {
+            let messages = [] 
 
-            messages = addErrors(messages, await joiValidation(ExamSchema, input))
+            messages = addErrors(messages, await joiValidation(ExamBodySchema, input))
             
             if(messages.lenght>0){
-                return {status:400, message: messages} //TODO: create object type
+                const error = new Error('ValidationSyntaxError');
+                error.details = messages;
+                return {error, data: null}
             }
             
             messages = addErrors(messages, await existTitleValidation(input.title)) 
@@ -48,11 +59,25 @@ const examValidator = ({examRepository}) => {
             messages = addErrors(messages, await maxReachedValidation(input.user)) 
             
             if(messages.length>0){ 
-                return {status:409, message: messages}
+                const error = new Error('ValidationConflictError');
+                error.details = messages;
+                return {error, data: null}
             }
-          
-             
-        }
+            return {error: null, input}
+        },
+
+        validateParams: async (params) => {
+            let messages = []
+
+            messages = addErrors(messages, await joiValidation(ExamParamsSchema, params))
+            if(messages.length>0){  
+                const error = new Error('ValidationSyntaxError');
+                error.details = messages;
+                return {error, data: null}
+            } 
+
+            return {error: null, data: params}
+        } 
     })
 }
 
