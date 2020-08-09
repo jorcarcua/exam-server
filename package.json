@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest ./test/unit",
     "devStart": "nodemon index.js",
     "db-init": "node scripts/db_init.js"
   },
@@ -18,10 +18,13 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.24",
-    "nodemon": "^2.0.4",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "jest": "^26.1.0",
+    "nodemon": "^2.0.4"
   }
 }

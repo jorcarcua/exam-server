@@ -1,8 +1,11 @@
-const {examRepository} = require ('../../infrastructure/repository')
- 
+const {
+  examRepository,
+  questionRepository,
+  userRepository,
+} = require('../../infrastructure/repository');
 
 module.exports = {
-    examValidator:      require('./ExamValidator')({examRepository}),
-    questionValidator:  require('./QuestionValidator'),
-    userValidator:      require('./UserValidator')
-}
+  examValidator: require('./examValidator')({ examRepository }),
+  questionValidator: require('./questionValidator')({ questionRepository }),
+  userValidator: require('./userValidator')({ userRepository }),
+};

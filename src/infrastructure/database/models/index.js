@@ -1,7 +1,5 @@
-
-
 module.exports = {
-    userModel: require('./UserSchema'),
-    examModel: require('./ExamSchema'),
-    questionModel: require('./QuestionSchema')
-}
+  UserModel: require('./UserSchema'),
+  ExamModel: require('./ExamSchema'),
+  QuestionModel: require('./QuestionSchema'),
+};

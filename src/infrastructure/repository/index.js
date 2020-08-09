@@ -1,9 +1,9 @@
-const examModel = require('../database/models').examModel
-const questionModel = require('../database/models').questionModel
-const userModel = require('../database/models').userModel
- 
+const { ExamModel } = require('../database/models');
+const { QuestionModel } = require('../database/models');
+const { UserModel } = require('../database/models');
+
 module.exports = {
-    examRepository: require('./ExamRepository')({examModel}),
-    questionRepository: require('./QuestionRepository')({questionModel}),
-    userRepository: require('./UserRepository')({userModel})
-}
+  examRepository: require('./examRepository')({ ExamModel }),
+  questionRepository: require('./questionRepository')({ QuestionModel }),
+  userRepository: require('./userRepository')({ UserModel }),
+};
