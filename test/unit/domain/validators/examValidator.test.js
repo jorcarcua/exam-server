@@ -1,113 +1,109 @@
-const action = require('../../../../src/domain/validators/examValidator')
-const config = require('../../../../config/development')
-const logger = require('../../../../src/infrastructure/logging/logger')
-//const db = require('../../../../src/infrastructure/database/database')({config, logger})
-//const {examRepository} = require('../../../../src/infrastructure/database/repository')
+const action = require('../../../../src/domain/validators/examValidator');
+const config = require('../../../../config/development');
+const logger = require('../../../../src/infrastructure/logging/logger');
+// const db = require('../../../../src/infrastructure/database/database')({config, logger})
+// const {examRepository} = require('../../../../src/infrastructure/database/repository')
 
+describe('validation of url params', () => {
+  // empty param
+  // incorrect id
+  // incorrect limit
+  // correct id
+  // correct limit
+  const subject = action({});
 
-describe("validation of url params", () =>{
-    //empty param
-    //incorrect id
-    //incorrect limit
-    //correct id
-    //correct limit
-    let subject = action({})
+  describe('id param validation', () => {
+    // empty id
+    // incorrect id format
+    // correct id format
+    test('empty id', async () => {
+      const params = { id: '' };
+      const { error, data } = await subject.validateParams(params);
+      expect(data).toBeNull();
+      expect(error.message).toBe('ValidationSyntaxError');
+    });
 
-    describe("id param validation", ()=>{
-        //empty id
-        //incorrect id format
-        //correct id format
-        test("empty id", async ()=>{
-            const params = {id: ''}
-            const {error, data} = await subject.validateParams(params) 
-            expect(data).toBeNull()
-            expect(error.message).toBe('ValidationSyntaxError')
-        })
+    test('incorrect id', async () => {
+      const params = { id: 'hello' };
+      const { error, data } = await subject.validateParams(params);
+      expect(data).toBeNull();
+      expect(error.message).toBe('ValidationSyntaxError');
+    });
 
-        test("incorrect id", async ()=>{
-            const params = {id: 'hello'}
-            const {error, data} = await subject.validateParams(params) 
-            expect(data).toBeNull()
-            expect(error.message).toBe('ValidationSyntaxError')
-        })
+    test('correct id', async () => {
+      const params = { id: '5f176e7c5d05810f9b3c416a' };
+      const { error, data } = await subject.validateParams(params);
+      expect(data).toBe(params);
+      expect(error).toBeNull();
+    });
+  });
 
-        test("correct id", async ()=>{
-            const params = {id: '5f176e7c5d05810f9b3c416a'}
-            const {error, data} = await subject.validateParams(params) 
-            expect(data).toBe(params)
-            expect(error).toBeNull()
-        })
+  describe('incorrect limit', () => {
+    // empty limit
+    // limit is not a number
+    // limit min 3
+    // limit max 30
+  });
 
-    })
+  describe('correct url params', () => {});
+});
 
-    describe("incorrect limit", ()=>{
-        //empty limit
-        //limit is not a number
-        //limit min 3
-        //limit max 30
-    })
+describe('validation of body', () => {
+  describe('title validation', () => {
+    // min 3
+    // max 30
+    // title empty
+    // tilte is not a string
+    // title correct
+  });
 
-    describe("correct url params", ()=>{
+  describe('user validation', () => {
+    // user empty
+    // user is not a string
+    // user is correct
+  });
 
-    }) 
-})
+  let exam;
+  let MockRepository;
+  let subject;
+  describe('title already exits', () => {
+    // title already exits
+    // title doesn't exits
+    exam = {
+      title: 'exam 1',
+      numberQuestions: 3,
+      success: 1,
+      failure: 2,
+      user: 1,
+    };
+    MockRepository = {
+      existsExamWithTitle: (title) => {
+        return true;
+      },
+      getExamsByUser: (userId) => {
+        return 1;
+      },
+    };
 
-describe("validation of body", () =>{
-    
-   
-    describe("title validation", () =>{
-        //min 3
-        //max 30
-        //title empty
-        //tilte is not a string
-        //title correct
-       
-    })
+    subject = action({ examRepository: MockRepository });
 
-    describe("user validation", () =>{
-       //user empty
-       //user is not a string
-       //user is correct
-      
-    })
- 
-    let exam;
-    let MockRepository;
-    let subject;
-    describe("title already exits", ()=>{
-        //title already exits
-        //title doesn't exits
-          exam =  { 
-            "title": "exam 1",
-            "numberQuestions":3,
-            "success": 1,
-            "failure": 2,
-            "user": 1
-        }
-          MockRepository = {
-            existsExamWithTitle: (title) =>{return true},
-            getExamsByUser:      (userId) => {return 1}
-        }
-        
-        subject = action({examRepository: MockRepository})
+    test('returns validation error', async () => {
+      const { error, data } = await subject.validateBody(exam);
+      expect(error.message).toBe('ValidationConflictError');
+      expect(data).toBeNull();
+    });
+  });
 
-        test("returns validation error", async ()=>{
-            const {error, data} = await subject.validateBody(exam)
-            expect(error.message).toBe('ValidationConflictError')
-            expect(data).toBeNull()
-        })
-
-    })
-
-    describe("max number of exams condition", ()=>{
-        //max number of exams reached
-        //max number of exams not reached
-        const MockRepository = {
-            existsExamWithTitle: (title) =>{return false},
-            getExamsByUser:      (userId) => {return 5}
-        }
-    })
-
-  
-    
-})
+  describe('max number of exams condition', () => {
+    // max number of exams reached
+    // max number of exams not reached
+    const MockRepository = {
+      existsExamWithTitle: (title) => {
+        return false;
+      },
+      getExamsByUser: (userId) => {
+        return 5;
+      },
+    };
+  });
+});

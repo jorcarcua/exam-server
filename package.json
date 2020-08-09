@@ -6,7 +6,9 @@
   "scripts": {
     "test": "jest ./test/unit",
     "devStart": "nodemon index.js",
-    "db-init": "node scripts/db_init.js"
+    "db-init": "node scripts/db_init.js",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +16,7 @@
     "@hapi/joi": "^17.1.1",
     "app-root-path": "^3.0.0",
     "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
@@ -24,7 +27,13 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "eslint": "^7.6.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "jest": "^26.1.0",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5"
   }
 }
