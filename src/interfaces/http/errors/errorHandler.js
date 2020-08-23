@@ -23,13 +23,11 @@ const errorHandler = ({ logger }) => {
         // TODO: treat not operational
       }
       logger.error(err.message);
-      console.log('antes de result');
       const result = res.status(statusCode).json({
         status: 'error',
         statusCode,
         message,
       });
-      console.log('despues de result');
       return result;
     },
     notFoundHandler: (req, res) => {

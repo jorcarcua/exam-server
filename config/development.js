@@ -5,7 +5,7 @@ module.exports = {
     PORT: process.env.PORT,
   },
   database: {
-    DATABASE_URL: process.env.DATABASE_URL,
+    DBURL: process.env.DBURL,
   },
   authentication: {
     JWT_SECRET: process.env.JWT_SECRET,

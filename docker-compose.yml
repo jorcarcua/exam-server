@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  database:
+    image: mongo
+    ports:
+      - 27017:27017
+    container_name: mongodb
+    volumes:
+      - mongodata:/data/db
+
+  app:
+    build: .
+    ports:
+      - 3001:3001
+    container_name: exam-server
+    links:
+      - database
+    environment:
+      - DBURL=mongodb://database:27017/exam
+    depends_on:
+      - database
+
+volumes:
+  mongodata:
+    external: true

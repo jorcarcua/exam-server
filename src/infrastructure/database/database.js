@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const database = ({ config, logger }) => ({
   start: () => {
-    mongoose.connect(config.DATABASE_URL, {
+    const dbUrl = config.DBURL;
+    mongoose.connect(dbUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,

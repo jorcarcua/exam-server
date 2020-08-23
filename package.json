@@ -6,7 +6,6 @@
   "scripts": {
     "test": "jest ./test/unit",
     "devStart": "nodemon index.js",
-    "db-init": "node scripts/db_init.js",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix"
   },
@@ -32,7 +31,7 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "jest": "^26.1.0",
+    "jest": "^25.5.4",
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5"
   }
