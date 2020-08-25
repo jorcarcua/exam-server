@@ -10,6 +10,7 @@ const server = ({ config, logger, authMiddlewares, router, errorHandler }) => ({
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(router);
+
     // eslint-disable-next-line no-unused-vars
     app.use((err, req, res, next) => {
       errorHandler.handleError(err, res);
