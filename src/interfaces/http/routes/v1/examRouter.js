@@ -1,6 +1,5 @@
 const router = require('express').Router();
 const { EXAM_NOT_FOUND, INTERNAL_ERROR } = require('./constants');
-const { simulateDelay } = require('./utils');
 const comonBuilder = require('./common');
 
 // eslint-disable-next-line no-unused-vars
@@ -13,8 +12,6 @@ const examRouter = ({ logger, authMiddlewares, BaseError, actions }) => {
     async (req, res, next) => {
       try {
         const params = req.query;
-        // Simulate a delay for testing purposes in the front end
-        await simulateDelay(1000);
 
         const examList = await actions.getExamsByUser(params, req.user._id);
         if (examList) {

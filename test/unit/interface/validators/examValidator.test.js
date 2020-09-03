@@ -1,6 +1,7 @@
-const action = require('../../../../src/domain/validators/examValidator');
-const config = require('../../../../config/development');
-const logger = require('../../../../src/infrastructure/logging/logger');
+const action = require('../../../../src/interfaces/http/validators/examValidator');
+
+const examDomainValidatorBuilder = require('../../../../src/domain/validators/examDomainValidator');
+
 // const db = require('../../../../src/infrastructure/database/database')({config, logger})
 // const {examRepository} = require('../../../../src/infrastructure/database/repository')
 
@@ -81,11 +82,14 @@ describe('validation of body', () => {
         return true;
       },
       getExamsByUser: (userId) => {
-        return 1;
+        return [];
       },
     };
+    const examDomainValidator = examDomainValidatorBuilder({
+      examRepository: MockRepository,
+    });
 
-    subject = action({ examRepository: MockRepository });
+    subject = action({ examDomainValidator });
 
     test('returns validation error', async () => {
       const { error, data } = await subject.validateBody(exam);
@@ -97,13 +101,38 @@ describe('validation of body', () => {
   describe('max number of exams condition', () => {
     // max number of exams reached
     // max number of exams not reached
-    const MockRepository = {
+    MockRepository = {
       existsExamWithTitle: (title) => {
         return false;
       },
       getExamsByUser: (userId) => {
-        return 5;
+        return [
+          {
+            title: 'exam 1',
+          },
+          {
+            title: 'exam 2',
+          },
+          {
+            title: 'exam 3',
+          },
+          {
+            title: 'exam 4',
+          },
+        ];
       },
     };
+
+    const examDomainValidator = examDomainValidatorBuilder({
+      examRepository: MockRepository,
+    });
+
+    subject = action({ examDomainValidator });
+
+    test('returns validation error', async () => {
+      const { error, data } = await subject.validateBody(exam);
+      expect(error.message).toBe('ValidationConflictError');
+      expect(data).toBeNull();
+    });
   });
 });

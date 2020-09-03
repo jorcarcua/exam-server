@@ -1,3 +1,5 @@
+const { addErrors } = require('../../../../utils');
+
 const joiValidation = async (schema, input) => {
   const { error } = await schema.validate(input);
   if (error) {
@@ -6,17 +8,8 @@ const joiValidation = async (schema, input) => {
   return [];
 };
 
-const addErrors = (messages, newMessages) => {
-  let result = messages;
-  if (newMessages && newMessages.lenghth > 0 && messages.length > 0) {
-    result = result.push(', ');
-  }
-
-  return [...result, ...newMessages];
-};
-
 module.exports = {
-  validationBody: async (schema, input, customValidation) => {
+  validationBody: async (schema, input, domainValidation) => {
     let messages = [];
 
     messages = addErrors(messages, await joiValidation(schema, input));
@@ -26,8 +19,8 @@ module.exports = {
       error.details = messages;
       return { error, data: null };
     }
-    if (customValidation) {
-      messages = await customValidation(input, messages);
+    if (domainValidation) {
+      messages = await domainValidation.validate(input);
     }
 
     if (messages.length > 0) {

@@ -3,11 +3,12 @@ const {
   questionRepository,
   userRepository,
 } = require('../../infrastructure/repository');
+
 const {
   examValidator,
   questionValidator,
   userValidator,
-} = require('../../domain/validators');
+} = require('../../interfaces/http/validators');
 
 module.exports = ({ config }) => ({
   getExamsByUser: require('./exam/getExamsByUser')({

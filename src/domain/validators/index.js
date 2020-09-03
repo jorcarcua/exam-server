@@ -5,7 +5,13 @@ const {
 } = require('../../infrastructure/repository');
 
 module.exports = {
-  examValidator: require('./examValidator')({ examRepository }),
-  questionValidator: require('./questionValidator')({ questionRepository }),
-  userValidator: require('./userValidator')({ userRepository }),
+  examDomainValidator: require('./examDomainValidator')({
+    examRepository,
+  }),
+  questionDomainValidator: require('./questionDomainValidator')({
+    questionRepository,
+  }),
+  userDomainValidator: require('./userDomainValidator')({
+    userRepository,
+  }),
 };

@@ -18,10 +18,10 @@ const QuestionParamsSchema = Joi.object({
 });
 
 // eslint-disable-next-line no-unused-vars
-const questionValidator = ({ questionRepository }) => {
+const questionValidator = ({ questionDomainValidator }) => {
   return {
     validateBody: async (input) => {
-      return validationBody(QuestionBodySchema, input, null);
+      return validationBody(QuestionBodySchema, input, questionDomainValidator);
     },
 
     validateParams: async (params) => {
